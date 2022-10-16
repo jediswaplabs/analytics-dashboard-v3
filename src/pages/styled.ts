@@ -27,8 +27,5 @@ export const ThemedBackgroundGlobal = styled.div<{ backgroundColor: string }>`
   max-width: 100vw !important;
   height: 200vh;
   mix-blend-mode: color;
-  background: ${({ backgroundColor, theme: { jediNavyBlue } }) => {
-    return `radial-gradient(50% 50% at 50% 50%, ${backgroundColor} 0%, ${jediNavyBlue} 100%)`
-  }};
   transform: translateY(-150vh);
 `

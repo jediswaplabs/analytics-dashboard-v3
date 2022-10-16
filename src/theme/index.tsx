@@ -207,13 +207,13 @@ export const TYPE = {
 
 export const FixedGlobalStyle = createGlobalStyle`
 html, input, textarea, button {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Avenir LT Std', sans-serif;
   font-display: fallback;
-}
+ }
 @supports (font-variation-settings: normal) {
   html, input, textarea, button {
-    font-family: 'Inter var', sans-serif;
-  }
+    font-family: 'Avenir LT Std', sans-serif;
+   }
 }
 
 html,
@@ -221,10 +221,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
- a {
-   color: ${colors(false).blue1}; 
- }
 
 * {
   box-sizing: border-box;
@@ -248,34 +244,18 @@ html {
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
   color: ${({ theme }) => theme.text1};
-  background-color: ${({ theme }) => theme.bg1};
-}
-
-.three-line-legend-dark {
-	width: 100%;
-	height: 70px;
-	position: absolute;
-	padding: 8px;
-	font-size: 12px;
-	color: white;
-	background-color: transparent;
-	text-align: left;
-	z-index: 10;
-  pointer-events: none;
-}
-
-.tv-lightweight-charts{
-  width: 100% !important;
-  
-  & > * {
-    width: 100% !important;
-  }
+  background-color: ${({ theme }) => theme.jediBg};
+  background: linear-gradient(108.58deg, #03001E 20.7%, #EC38BC 36.65%, #7303C0 57.02%, #2A3EF5 71.08%, #38742F 93.32%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  backdrop-filter: blur(400px);
 }
 
 body {
   min-height: 100vh;
-  background-position: 0 -30vh;
+  background: linear-gradient(66.46deg, #03001E 24.27%, rgba(3, 0, 30, 0.612102) 57.29%, rgba(3, 0, 30, 0) 100%);
+  backdrop-filter: blur(400px);
   background-repeat: no-repeat;
-
+  background-size: cover;
 }
 `

@@ -44,7 +44,6 @@ const BodyWrapper = styled.div<{ warningActive?: boolean }>`
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 1;
-  background-color: ${({ theme: { jediNavyBlue } }) => jediNavyBlue};
 
   > * {
     max-width: 1200px;
