@@ -7,8 +7,8 @@ export const PageButtons = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0.2em;
-  margin-bottom: 0.5em;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
 `
 
 export const Arrow = styled.div<{ faded: boolean }>`
@@ -23,7 +23,8 @@ export const Arrow = styled.div<{ faded: boolean }>`
 
 export const Break = styled.div`
   height: 1px;
-  background-color: ${({ theme }) => theme.bg1};
+  // background-color: ${({ theme }) => theme.bg1};
+  background-color: rgba(255, 255, 255, 0.2);
   width: 100%;
 `
 

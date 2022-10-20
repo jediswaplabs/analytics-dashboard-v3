@@ -18,10 +18,13 @@ import { TOKEN_HIDE } from '../../constants/index'
 
 const Wrapper = styled(DarkGreyCard)`
   width: 100%;
-  box-shadow: inset 0px 30.0211px 43.1072px -27.7118px rgba(255, 255, 255, 0.5),
-    inset 0px 5.38841px 8.46749px -3.07909px #ffffff, inset 0px -63.1213px 52.3445px -49.2654px rgba(96, 68, 145, 0.3),
-    inset 0px 75.4377px 76.9772px -36.9491px rgba(202, 172, 255, 0.3),
-    inset 0px 3.07909px 13.8559px rgba(154, 146, 210, 0.3), inset 0px 0.769772px 30.7909px rgba(227, 222, 255, 0.2);
+  padding: 0;
+  overflow: hidden;
+`
+
+const TableHeader = styled.div`
+  background: rgba(255, 255, 255, 0.2);
+  padding: 16px 30px;
 `
 
 const ResponsiveGrid = styled.div`
@@ -58,6 +61,8 @@ const ResponsiveGrid = styled.div`
 
 const LinkWrapper = styled(Link)`
   text-decoration: none;
+  padding: 15px 30px;
+
   :hover {
     cursor: pointer;
     opacity: 0.7;
@@ -188,60 +193,63 @@ export default function TokenTable({
   return (
     <Wrapper>
       {sortedTokens.length > 0 ? (
-        <AutoColumn gap="16px">
-          <ResponsiveGrid>
-            <Label color={theme.text2}>#</Label>
-            <ClickableText color={theme.text2} onClick={() => handleSort(SORT_FIELD.name)}>
-              Name {arrow(SORT_FIELD.name)}
-            </ClickableText>
-            <Label color={theme.text2}>Symbol</Label>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
-              Liquidity {arrow(SORT_FIELD.tvlUSD)}
-            </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
-              Volume 24H {arrow(SORT_FIELD.volumeUSD)}
-            </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.priceUSD)}>
-              Price {arrow(SORT_FIELD.priceUSD)}
-            </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.priceUSDChange)}>
-              Price Change {arrow(SORT_FIELD.priceUSDChange)}
-            </ClickableText>
-            {/* <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.priceUSDChangeWeek)}>
+        <>
+          <TableHeader>
+            <ResponsiveGrid>
+              <Label color={theme.text2}>#</Label>
+              <ClickableText color={theme.text2} onClick={() => handleSort(SORT_FIELD.name)}>
+                Name {arrow(SORT_FIELD.name)}
+              </ClickableText>
+              <Label color={theme.text2}>Symbol</Label>
+              <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
+                Liquidity {arrow(SORT_FIELD.tvlUSD)}
+              </ClickableText>
+              <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
+                Volume 24H {arrow(SORT_FIELD.volumeUSD)}
+              </ClickableText>
+              <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.priceUSD)}>
+                Price {arrow(SORT_FIELD.priceUSD)}
+              </ClickableText>
+              <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.priceUSDChange)}>
+                Price Change {arrow(SORT_FIELD.priceUSDChange)}
+              </ClickableText>
+              {/* <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.priceUSDChangeWeek)}>
             7d {arrow(SORT_FIELD.priceUSDChangeWeek)}
           </ClickableText> */}
-          </ResponsiveGrid>
-
+            </ResponsiveGrid>
+          </TableHeader>
           <Break />
-          {sortedTokens.map((data, i) => {
-            if (data) {
-              return (
-                <React.Fragment key={i}>
-                  <DataRow index={(page - 1) * MAX_ITEMS + i} tokenData={data} />
-                  <Break />
-                </React.Fragment>
-              )
-            }
-            return null
-          })}
-          <PageButtons>
-            <div
-              onClick={() => {
-                setPage(page === 1 ? page : page - 1)
-              }}
-            >
-              <Arrow faded={page === 1 ? true : false}>←</Arrow>
-            </div>
-            <TYPE.body>{'Page ' + page + ' of ' + maxPage}</TYPE.body>
-            <div
-              onClick={() => {
-                setPage(page === maxPage ? page : page + 1)
-              }}
-            >
-              <Arrow faded={page === maxPage ? true : false}>→</Arrow>
-            </div>
-          </PageButtons>
-        </AutoColumn>
+          <AutoColumn>
+            {sortedTokens.map((data, i) => {
+              if (data) {
+                return (
+                  <React.Fragment key={i}>
+                    <DataRow index={(page - 1) * MAX_ITEMS + i} tokenData={data} />
+                    <Break />
+                  </React.Fragment>
+                )
+              }
+              return null
+            })}
+            <PageButtons>
+              <div
+                onClick={() => {
+                  setPage(page === 1 ? page : page - 1)
+                }}
+              >
+                <Arrow faded={page === 1 ? true : false}>←</Arrow>
+              </div>
+              <TYPE.body>{'Page ' + page + ' of ' + maxPage}</TYPE.body>
+              <div
+                onClick={() => {
+                  setPage(page === maxPage ? page : page + 1)
+                }}
+              >
+                <Arrow faded={page === maxPage ? true : false}>→</Arrow>
+              </div>
+            </PageButtons>
+          </AutoColumn>
+        </>
       ) : (
         <LoadingRows>
           <div />

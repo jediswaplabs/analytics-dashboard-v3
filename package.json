@@ -1,6 +1,6 @@
 {
-  "name": "@uniswap/interface",
-  "description": "Uniswap Interface",
+  "name": "jediswap-analytics-dashboard",
+  "description": "Jediswap analytics dashboard",
   "homepage": ".",
   "private": true,
   "devDependencies": {

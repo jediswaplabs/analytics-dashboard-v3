@@ -67,7 +67,7 @@ export function colors(darkMode: boolean): Colors {
     text5: '#2C2F36',
 
     // backgrounds / greys
-    bg0: darkMode ? '#191B1F' : '#F7F8FA',
+    bg0: darkMode ? '#c4c4c403' : '#ffffff03',
     bg1: '#212429',
     bg2: '#2C2F36',
     bg3: '#40444F',
@@ -244,17 +244,21 @@ html {
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
   color: ${({ theme }) => theme.text1};
-  background-color: ${({ theme }) => theme.jediBg};
-  background: linear-gradient(108.58deg, #03001E 20.7%, #EC38BC 36.65%, #7303C0 57.02%, #2A3EF5 71.08%, #38742F 93.32%);
+  //background-color: ${({ theme }) => theme.jediBg};
+  background-color: #fff;
+  //background: rgb(35,9,48);
+  //background: linear-gradient(108.58deg, #03001E 20.7%, #EC38BC 36.65%, #7303C0 57.02%, #2A3EF5 71.08%, #38742F 93.32%);
+  //backdrop-filter: blur(400px);
   background-repeat: no-repeat;
   background-size: cover;
-  backdrop-filter: blur(400px);
 }
 
 body {
   min-height: 100vh;
-  background: linear-gradient(66.46deg, #03001E 24.27%, rgba(3, 0, 30, 0.612102) 57.29%, rgba(3, 0, 30, 0) 100%);
-  backdrop-filter: blur(400px);
+  //background: linear-gradient(66.46deg, #03001E 24.27%, rgba(3, 0, 30, 0.612102) 57.29%, rgba(3, 0, 30, 0) 100%);
+  //backdrop-filter: blur(400px);
+  background: rgb(35,9,48);
+  background: linear-gradient(140deg, rgba(39,9,47,1) 0%, rgba(16, 9, 40, 1) 15%, rgba(0,9,36,1) 100%);
   background-repeat: no-repeat;
   background-size: cover;
 }
