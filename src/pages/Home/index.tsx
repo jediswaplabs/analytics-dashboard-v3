@@ -23,7 +23,7 @@ import { MonoSpace } from 'components/shared'
 import { useActiveNetworkVersion } from 'state/application/hooks'
 import { useTransformedVolumeData } from 'hooks/chart'
 import { SmallOptionButton } from 'components/Button'
-import { VolumeWindow } from 'types'
+import {TvlWindow, VolumeWindow} from 'types'
 
 const ChartWrapper = styled.div`
   width: 49%;
@@ -107,6 +107,9 @@ export default function Home() {
   const weeklyVolumeData = useTransformedVolumeData(chartData, 'week')
   const monthlyVolumeData = useTransformedVolumeData(chartData, 'month')
 
+  const weeklyTvlData = useTransformedVolumeData(chartData, 'week')
+  const monthlyTvlData = useTransformedVolumeData(chartData, 'month')
+
   const allTokens = useAllTokenData()
 
   const formattedTokens = useMemo(() => {
@@ -116,6 +119,7 @@ export default function Home() {
   }, [allTokens])
 
   const [volumeWindow, setVolumeWindow] = useState(VolumeWindow.weekly)
+  const [tvlWindow, setTvlWindow] = useState(TvlWindow.weekly)
 
   const tvlValue = useMemo(() => {
     if (liquidityHover) {
@@ -125,26 +129,82 @@ export default function Home() {
   }, [liquidityHover, protocolData?.tvlUSD])
 
   return (
-    <PageWrapper>
-      <ThemedBackgroundGlobal backgroundColor={activeNetwork.bgColor} />
-      <AutoColumn gap="16px">
-        <TYPE.main>JediSwap Dashboard</TYPE.main>
+    <>
+      <AutoColumn gap="32px">
+        <HideSmall>
+            <RowBetween>
+              <RowFixed>
+                <RowFixed mr="20px">
+                  <TYPE.main mr="4px" fontWeight={700}>Volume 24H: </TYPE.main>
+                  <TYPE.label mr="4px">{formatDollarAmount(protocolData?.volumeUSD)}</TYPE.label>
+                  <Percent value={protocolData?.volumeUSDChange} wrap={true} />
+                </RowFixed>
+                <RowFixed mr="20px" fontWeight={700}>
+                  <TYPE.main mr="4px">Fees 24H: </TYPE.main>
+                  <TYPE.label mr="4px">{formatDollarAmount(protocolData?.feesUSD)}</TYPE.label>
+                  <Percent value={protocolData?.feeChange} wrap={true} />
+                </RowFixed>
+                <HideMedium>
+                  <RowFixed mr="20px">
+                    <TYPE.main mr="4px" fontWeight={700}>TVL: </TYPE.main>
+                    <TYPE.label mr="4px">{formatDollarAmount(protocolData?.tvlUSD)}</TYPE.label>
+                    <TYPE.main></TYPE.main>
+                    <Percent value={protocolData?.tvlUSDChange} wrap={true} />
+                  </RowFixed>
+                </HideMedium>
+              </RowFixed>
+            </RowBetween>
+        </HideSmall>
+
         <ResponsiveRow>
           <ChartWrapper>
             <LineChart
-              data={formattedTvlData}
+              data={
+                tvlWindow === TvlWindow.monthly
+                  ? monthlyTvlData
+                  : tvlWindow === TvlWindow.weekly
+                    ? weeklyTvlData
+                    : formattedTvlData
+              }
               height={220}
               minHeight={332}
-              color={activeNetwork.primaryColor}
+              // color={activeNetwork.primaryColor}
+              color={theme.primary2}
               value={liquidityHover}
               label={leftLabel}
               setValue={setLiquidityHover}
               setLabel={setLeftLabel}
+              activeWindow={tvlWindow}
+              topRight={
+                <RowFixed style={{ marginLeft: '-40px'}}>
+                  <SmallOptionButton
+                    active={tvlWindow === TvlWindow.daily}
+                    style={{ borderTopRightRadius: '0', borderBottomRightRadius: '0' }}
+                    onClick={() => setTvlWindow(TvlWindow.daily)}
+                  >
+                    D
+                  </SmallOptionButton>
+                  <SmallOptionButton
+                    active={tvlWindow === TvlWindow.weekly}
+                    style={{ borderRadius: '0', margin: '0 1px' }}
+                    onClick={() => setTvlWindow(TvlWindow.weekly)}
+                  >
+                    W
+                  </SmallOptionButton>
+                  <SmallOptionButton
+                    active={tvlWindow === TvlWindow.monthly}
+                    style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0' }}
+                    onClick={() => setTvlWindow(TvlWindow.monthly)}
+                  >
+                    M
+                  </SmallOptionButton>
+                </RowFixed>
+              }
               topLeft={
                 <AutoColumn gap="4px">
-                  <TYPE.mediumHeader fontSize="16px">TVL</TYPE.mediumHeader>
+                  <TYPE.mediumHeader fontSize="16px" fontWeight={700}>Liquidity</TYPE.mediumHeader>
                   <TYPE.largeHeader fontSize="32px">
-                    <MonoSpace>{tvlValue} </MonoSpace>
+                    <MonoSpace>{tvlValue}</MonoSpace>
                   </TYPE.largeHeader>
                   <TYPE.main fontSize="12px" height="14px">
                     {leftLabel ? <MonoSpace>{leftLabel} (UTC)</MonoSpace> : null}
@@ -164,30 +224,31 @@ export default function Home() {
                   ? weeklyVolumeData
                   : formattedVolumeData
               }
-              color={theme.blue1}
+              color={theme.primary2}
               setValue={setVolumeHover}
               setLabel={setRightLabel}
               value={volumeHover}
               label={rightLabel}
               activeWindow={volumeWindow}
               topRight={
-                <RowFixed style={{ marginLeft: '-40px', marginTop: '8px' }}>
+                <RowFixed style={{ marginLeft: '-40px', alignItems: 'flex-start' }}>
                   <SmallOptionButton
                     active={volumeWindow === VolumeWindow.daily}
+                    style={{ borderTopRightRadius: '0', borderBottomRightRadius: '0' }}
                     onClick={() => setVolumeWindow(VolumeWindow.daily)}
                   >
                     D
                   </SmallOptionButton>
                   <SmallOptionButton
                     active={volumeWindow === VolumeWindow.weekly}
-                    style={{ marginLeft: '8px' }}
+                    style={{ borderRadius: '0', margin: '0 1px' }}
                     onClick={() => setVolumeWindow(VolumeWindow.weekly)}
                   >
                     W
                   </SmallOptionButton>
                   <SmallOptionButton
                     active={volumeWindow === VolumeWindow.monthly}
-                    style={{ marginLeft: '8px' }}
+                    style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0' }}
                     onClick={() => setVolumeWindow(VolumeWindow.monthly)}
                   >
                     M
@@ -208,47 +269,29 @@ export default function Home() {
             />
           </ChartWrapper>
         </ResponsiveRow>
-        <HideSmall>
-          <DarkGreyCard>
-            <RowBetween>
-              <RowFixed>
-                <RowFixed mr="20px">
-                  <TYPE.main mr="4px">Volume 24H: </TYPE.main>
-                  <TYPE.label mr="4px">{formatDollarAmount(protocolData?.volumeUSD)}</TYPE.label>
-                  <Percent value={protocolData?.volumeUSDChange} wrap={true} />
-                </RowFixed>
-                <RowFixed mr="20px">
-                  <TYPE.main mr="4px">Fees 24H: </TYPE.main>
-                  <TYPE.label mr="4px">{formatDollarAmount(protocolData?.feesUSD)}</TYPE.label>
-                  <Percent value={protocolData?.feeChange} wrap={true} />
-                </RowFixed>
-                <HideMedium>
-                  <RowFixed mr="20px">
-                    <TYPE.main mr="4px">TVL: </TYPE.main>
-                    <TYPE.label mr="4px">{formatDollarAmount(protocolData?.tvlUSD)}</TYPE.label>
-                    <TYPE.main></TYPE.main>
-                    <Percent value={protocolData?.tvlUSDChange} wrap={true} />
-                  </RowFixed>
-                </HideMedium>
-              </RowFixed>
-            </RowBetween>
-          </DarkGreyCard>
-        </HideSmall>
-        <RowBetween>
-          <TYPE.main>Top Tokens</TYPE.main>
-          <StyledInternalLink to="tokens">Explore</StyledInternalLink>
-        </RowBetween>
-        <TokenTable tokenDatas={formattedTokens} />
-        <RowBetween>
-          <TYPE.main>Top Pools</TYPE.main>
-          <StyledInternalLink to="pools">Explore</StyledInternalLink>
-        </RowBetween>
-        <PoolTable poolDatas={poolDatas} />
-        <RowBetween>
-          <TYPE.main>Transactions</TYPE.main>
-        </RowBetween>
-        {transactions ? <TransactionsTable transactions={transactions} color={activeNetwork.primaryColor} /> : null}
+
+        <AutoColumn gap="16px">
+          <RowBetween>
+            <TYPE.main>Top Tokens</TYPE.main>
+          </RowBetween>
+          <TokenTable tokenDatas={formattedTokens} />
+        </AutoColumn>
+
+        <AutoColumn gap="16px">
+          <RowBetween>
+            <TYPE.main>Top Pools</TYPE.main>
+          </RowBetween>
+          <PoolTable poolDatas={poolDatas} />
+        </AutoColumn>
+
+        <AutoColumn gap="16px">
+          <RowBetween>
+            <TYPE.main>Transactions</TYPE.main>
+          </RowBetween>
+          {transactions ? <TransactionsTable transactions={transactions} color={theme.jediBlue} /> : null}
+        </AutoColumn>
+
       </AutoColumn>
-    </PageWrapper>
+    </>
   )
 }

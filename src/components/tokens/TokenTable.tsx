@@ -20,6 +20,7 @@ const Wrapper = styled(DarkGreyCard)`
   width: 100%;
   padding: 0;
   overflow: hidden;
+  border-radius: 8px;
 `
 
 const TableHeader = styled.div`
@@ -77,7 +78,6 @@ const ResponsiveLogo = styled(CurrencyLogo)`
 `
 
 const DataRow = ({ tokenData, index }: { tokenData: TokenData; index: number }) => {
-  const theme = useTheme()
   return (
     <LinkWrapper to={'tokens/' + tokenData.address}>
       <ResponsiveGrid>
@@ -94,22 +94,22 @@ const DataRow = ({ tokenData, index }: { tokenData: TokenData; index: number }) 
         </Label>
         <Label>
           <RowFixed>
-            <Label ml="8px" color={theme.text3}>
+            <Label ml="8px">
               {tokenData.symbol}
             </Label>
           </RowFixed>
         </Label>
-        <Label end={1} fontWeight={400}>
+        <Label end={1}>
           {formatDollarAmount(tokenData.tvlUSD)}
         </Label>
-        <Label end={1} fontWeight={400}>
+        <Label end={1}>
           {formatDollarAmount(tokenData.volumeUSD)}
         </Label>
-        <Label end={1} fontWeight={400}>
+        <Label end={1}>
           {formatDollarAmount(tokenData.priceUSD)}
         </Label>
-        <Label end={1} fontWeight={400}>
-          <Percent value={tokenData.priceUSDChange} fontWeight={400} />
+        <Label end={1}>
+          <Percent value={tokenData.priceUSDChange} />
         </Label>
       </ResponsiveGrid>
     </LinkWrapper>
@@ -196,21 +196,21 @@ export default function TokenTable({
         <>
           <TableHeader>
             <ResponsiveGrid>
-              <Label color={theme.text2}>#</Label>
-              <ClickableText color={theme.text2} onClick={() => handleSort(SORT_FIELD.name)}>
+              <Label>#</Label>
+              <ClickableText onClick={() => handleSort(SORT_FIELD.name)}>
                 Name {arrow(SORT_FIELD.name)}
               </ClickableText>
-              <Label color={theme.text2}>Symbol</Label>
-              <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
+              <Label>Symbol</Label>
+              <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
                 Liquidity {arrow(SORT_FIELD.tvlUSD)}
               </ClickableText>
-              <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
+              <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
                 Volume 24H {arrow(SORT_FIELD.volumeUSD)}
               </ClickableText>
-              <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.priceUSD)}>
+              <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.priceUSD)}>
                 Price {arrow(SORT_FIELD.priceUSD)}
               </ClickableText>
-              <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.priceUSDChange)}>
+              <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.priceUSDChange)}>
                 Price Change {arrow(SORT_FIELD.priceUSDChange)}
               </ClickableText>
               {/* <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.priceUSDChangeWeek)}>

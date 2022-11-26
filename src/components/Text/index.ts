@@ -4,8 +4,8 @@ import { TYPE } from 'theme'
 // responsive text
 export const Label = styled(TYPE.label)<{ end?: number }>`
   display: flex;
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 700;
   justify-content: ${({ end }) => (end ? 'flex-end' : 'flex-start')};
   align-items: center;
   font-variant-numeric: tabular-nums;

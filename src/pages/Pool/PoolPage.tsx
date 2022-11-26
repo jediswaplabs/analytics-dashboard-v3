@@ -46,7 +46,7 @@ const TokenButton = styled(GreyCard)`
   border-radius: 10px;
   :hover {
     cursor: pointer;
-    opacity: 0.6;
+    //opacity: 0.6;
   }
 `
 
@@ -84,7 +84,6 @@ export default function PoolPage({
   }, [])
 
   // theming
-  const backgroundColor = useColor()
   const theme = useTheme()
 
   // token data
@@ -139,10 +138,9 @@ export default function PoolPage({
   const [savedPools, addSavedPool] = useSavedPools()
 
   return (
-    <PageWrapper>
-      <ThemedBackground backgroundColor={backgroundColor} />
+    <>
       {poolData ? (
-        <AutoColumn gap="32px">
+        <AutoColumn gap="16px">
           <RowBetween>
             <AutoRow gap="4px">
               <StyledInternalLink to={networkPrefix(activeNetwork)}>
@@ -159,7 +157,7 @@ export default function PoolPage({
             <RowFixed gap="10px" align="center">
               <SavedIcon fill={savedPools.includes(address)} onClick={() => addSavedPool(address)} />
               <StyledExternalLink href={getEtherscanLink(1, address, 'address', activeNetwork)}>
-                <ExternalLink stroke={theme.text2} size={'17px'} style={{ marginLeft: '12px' }} />
+                <ExternalLink stroke={theme.text1} size={'17px'} style={{ marginLeft: '12px' }} />
               </StyledExternalLink>
             </RowFixed>
           </RowBetween>
@@ -173,9 +171,9 @@ export default function PoolPage({
                   fontSize="24px"
                 >{` ${poolData.token0.symbol} / ${poolData.token1.symbol} `}</TYPE.label>
                 <GreyBadge>{feeTierPercent(poolData.feeTier)}</GreyBadge>
-                {activeNetwork === EthereumNetworkInfo ? null : (
-                  <GenericImageWrapper src={activeNetwork.imageURL} style={{ marginLeft: '8px' }} size={'26px'} />
-                )}
+                {/*{activeNetwork === EthereumNetworkInfo ? null : (*/}
+                {/*  <GenericImageWrapper src={activeNetwork.imageURL} style={{ marginLeft: '8px' }} size={'26px'} />*/}
+                {/*)}*/}
               </RowFixed>
               <ResponsiveRow>
                 <StyledInternalLink to={networkPrefix(activeNetwork) + 'tokens/' + poolData.token0.address}>
@@ -207,7 +205,7 @@ export default function PoolPage({
             {activeNetwork !== EthereumNetworkInfo ? null : (
               <RowFixed>
                 <StyledExternalLink
-                  href={`https://app.uniswap.org/#/add/${poolData.token0.address}/${poolData.token1.address}/${poolData.feeTier}`}
+                  href={`https://app.jediswap.xyz/add/${poolData.token0.address}/${poolData.token1.address}/${poolData.feeTier}`}
                 >
                   <ButtonGray width="170px" mr="12px" style={{ height: '44px' }}>
                     <RowBetween>
@@ -217,7 +215,7 @@ export default function PoolPage({
                   </ButtonGray>
                 </StyledExternalLink>
                 <StyledExternalLink
-                  href={`https://app.uniswap.org/#/swap?inputCurrency=${poolData.token0.address}&outputCurrency=${poolData.token1.address}`}
+                  href={`https://app.jediswap.xyz/swap?inputCurrency=${poolData.token0.address}&outputCurrency=${poolData.token1.address}`}
                 >
                   <ButtonPrimary width="100px" style={{ height: '44px' }}>
                     Trade
@@ -289,6 +287,7 @@ export default function PoolPage({
                   </TYPE.main>
                 </AutoColumn>
                 <ToggleWrapper width="240px">
+
                   <ToggleElementFree
                     isActive={view === ChartView.VOL}
                     fontSize="12px"
@@ -317,7 +316,7 @@ export default function PoolPage({
               {view === ChartView.VOL ? (
                 <BarChart
                   data={formattedVolumeData}
-                  color={backgroundColor}
+                  color={theme.primary2}
                   minHeight={340}
                   setValue={setLatestValue}
                   setLabel={setValueLabel}
@@ -327,7 +326,7 @@ export default function PoolPage({
               ) : view === ChartView.FEES ? (
                 <BarChart
                   data={formattedFeesUSD}
-                  color={backgroundColor}
+                  color={theme.primary2}
                   minHeight={340}
                   setValue={setLatestValue}
                   setLabel={setValueLabel}
@@ -340,13 +339,13 @@ export default function PoolPage({
             </DarkGreyCard>
           </ContentLayout>
           <TYPE.main fontSize="24px">Transactions</TYPE.main>
-          <DarkGreyCard>
-            {transactions ? <TransactionTable transactions={transactions} /> : <LocalLoader fill={false} />}
-          </DarkGreyCard>
+
+          {transactions ? <TransactionTable transactions={transactions} /> : <LocalLoader fill={false} />}
+
         </AutoColumn>
       ) : (
         <Loader />
       )}
-    </PageWrapper>
+    </>
   )
 }

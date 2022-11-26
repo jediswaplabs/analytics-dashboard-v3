@@ -68,10 +68,10 @@ export const ScrollableX = styled.div`
   }
 `
 
-export const GreyBadge = styled(Card)`
+export const GreyBadge = styled(DarkGreyCard)`
   width: fit-content;
   border-radius: 8px;
-  background: ${({ theme }) => theme.bg3};
+  //background: ${({ theme }) => theme.bg3};
   color: ${({ theme }) => theme.text1};
   padding: 4px 6px;
   font-weight: 400;

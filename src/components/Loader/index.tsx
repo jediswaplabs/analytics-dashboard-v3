@@ -1,5 +1,5 @@
 import React from 'react'
-import v3 from '../../assets/images/whitev3.svg'
+import jediSwapLogo from '../../assets/images/jediswap-logo.png'
 import styled, { keyframes, css } from 'styled-components'
 
 const rotate = keyframes`
@@ -51,22 +51,14 @@ const pulse = keyframes`
   100% { transform: scale(1); }
 `
 
-const Wrapper = styled.div<{ fill: number; height?: string }>`
+const Wrapper = styled.div`
+  position: absolute;
   pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme, fill }) => (fill ? 'black' : theme.bg0)};
   height: 100%;
   width: 100%;
-  ${(props) =>
-    props.fill && !props.height
-      ? css`
-          height: 100vh;
-        `
-      : css`
-          height: 180px;
-        `}
 `
 
 const AnimatedImg = styled.div`
@@ -76,11 +68,11 @@ const AnimatedImg = styled.div`
   }
 `
 
-export const LocalLoader = ({ fill }: { fill: boolean }) => {
+export const LocalLoader = ({}) => {
   return (
-    <Wrapper fill={fill ? 1 : 0}>
+    <Wrapper>
       <AnimatedImg>
-        <img src={v3} alt="loading-icon" />
+        <img src={jediSwapLogo} alt="loading-icon" />
       </AnimatedImg>
     </Wrapper>
   )

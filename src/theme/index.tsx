@@ -61,7 +61,7 @@ export function colors(darkMode: boolean): Colors {
 
     // text
     text1: jediWhite,
-    text2: '#C3C5CB',
+    text2: jediPink,
     text3: '#6C7284',
     text4: '#565A69',
     text5: '#2C2F36',
@@ -156,13 +156,13 @@ const TextWrapper = styled(Text)<{ color: keyof Colors }>`
 
 export const TYPE = {
   main(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text2'} {...props} />
+    return <TextWrapper fontWeight={500} color={'text1'} {...props} />
   },
   link(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'primary1'} {...props} />
   },
   label(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text1'} {...props} />
+    return <TextWrapper fontWeight={700} color={'text1'} {...props} />
   },
   black(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'text1'} {...props} />
@@ -177,7 +177,7 @@ export const TYPE = {
     return <TextWrapper fontWeight={600} fontSize={24} color={'text1'} {...props} />
   },
   mediumHeader(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={20} color={'text3'} {...props} />
+    return <TextWrapper fontWeight={500} fontSize={20} color={'white'} {...props} />
   },
   subHeader(props: TextProps) {
     return <TextWrapper fontWeight={400} fontSize={14} {...props} />
@@ -207,12 +207,12 @@ export const TYPE = {
 
 export const FixedGlobalStyle = createGlobalStyle`
 html, input, textarea, button {
-  font-family: 'Avenir LT Std', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-display: fallback;
  }
 @supports (font-variation-settings: normal) {
   html, input, textarea, button {
-    font-family: 'Avenir LT Std', sans-serif;
+    font-family: 'DM Sans', sans-serif;
    }
 }
 

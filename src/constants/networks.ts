@@ -3,6 +3,7 @@ import ARBITRUM_LOGO_URL from '../assets/images/arbitrum.svg'
 import ETHEREUM_LOGO_URL from '../assets/images/ethereum-logo.png'
 import POLYGON_LOGO_URL from '../assets/images/polygon-logo.png'
 import CELO_LOGO_URL from '../assets/images/celo-logo.svg'
+import STARKNET_LOGO_URL from '../assets/images/celo-logo.svg'
 
 export enum SupportedNetwork {
   ETHEREUM,
@@ -10,6 +11,7 @@ export enum SupportedNetwork {
   OPTIMISM,
   POLYGON,
   CELO,
+  STARKNET,
 }
 
 export type NetworkInfo = {
@@ -31,6 +33,16 @@ export const EthereumNetworkInfo: NetworkInfo = {
   primaryColor: '#fc077d',
   secondaryColor: '#2172E5',
   imageURL: ETHEREUM_LOGO_URL,
+}
+
+export const StarknetNetworkInfo: NetworkInfo = {
+  id: SupportedNetwork.STARKNET,
+  route: '',
+  name: 'Starknet',
+  bgColor: '#fc077d',
+  primaryColor: '#fc077d',
+  secondaryColor: '#2172E5',
+  imageURL: STARKNET_LOGO_URL,
 }
 
 export const ArbitrumNetworkInfo: NetworkInfo = {
@@ -75,9 +87,10 @@ export const CeloNetworkInfo: NetworkInfo = {
 }
 
 export const SUPPORTED_NETWORK_VERSIONS: NetworkInfo[] = [
-  EthereumNetworkInfo,
-  PolygonNetworkInfo,
-  OptimismNetworkInfo,
-  ArbitrumNetworkInfo,
-  CeloNetworkInfo,
+  StarknetNetworkInfo,
+  // EthereumNetworkInfo,
+  // PolygonNetworkInfo,
+  // OptimismNetworkInfo,
+  // ArbitrumNetworkInfo,
+  // CeloNetworkInfo,
 ]

@@ -1,24 +1,25 @@
+/* eslint-disable */
 import React, { Dispatch, SetStateAction, ReactNode } from 'react'
-import { BarChart, ResponsiveContainer, XAxis, Tooltip, Bar } from 'recharts'
+import {BarChart, ResponsiveContainer, XAxis, Tooltip, Bar, YAxis} from 'recharts'
 import styled from 'styled-components'
-import Card from 'components/Card'
+import Card, {DarkGreyCard} from 'components/Card'
 import { RowBetween } from 'components/Row'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import useTheme from 'hooks/useTheme'
 import { VolumeWindow } from 'types'
 import { LoadingRows } from 'components/Loader'
+import {formatDollarAmount} from "../../utils/numbers";
 dayjs.extend(utc)
 
 const DEFAULT_HEIGHT = 300
 
-const Wrapper = styled(Card)`
+const Wrapper = styled(DarkGreyCard)`
   width: 100%;
   height: ${DEFAULT_HEIGHT}px;
-  padding: 1rem;
-  padding-right: 2rem;
+  padding: 32px;
   display: flex;
-  background-color: ${({ theme }) => theme.bg0};
+  //background-color: ${({ theme }) => theme.bg0};
   flex-direction: column;
   > * {
     font-size: 1rem;
@@ -83,7 +84,7 @@ const Chart = ({
 
   return (
     <Wrapper minHeight={minHeight} {...rest}>
-      <RowBetween style={{ alignItems: 'flex-start' }}>
+      <RowBetween style={{ alignItems: 'flex-start', marginBottom: 10}}>
         {topLeft ?? null}
         {topRight ?? null}
       </RowBetween>
@@ -110,12 +111,25 @@ const Chart = ({
               setValue && setValue(undefined)
             }}
           >
+            <YAxis
+              dataKey="value"
+              axisLine={false}
+              stroke={theme.text1}
+              tickLine={false}
+              fontSize={12}
+              dx={-10}
+              tickFormatter={(value) => formatDollarAmount(value, 2)}
+              // minTickGap={12}
+            />
             <XAxis
               dataKey="time"
               axisLine={false}
+              stroke={theme.text1}
+              fontSize={12}
               tickLine={false}
+              dy={10}
               tickFormatter={(time) => dayjs(time).format(activeWindow === VolumeWindow.monthly ? 'MMM' : 'DD')}
-              minTickGap={10}
+              minTickGap={12}
             />
             <Tooltip
               cursor={{ fill: theme.bg2 }}

@@ -172,7 +172,7 @@ export default function TokenPage({
         !tokenData.exists ? (
           <LightGreyCard style={{ textAlign: 'center' }}>
             No pool has been created with this token yet. Create one
-            <StyledExternalLink style={{ marginLeft: '4px' }} href={`https://app.uniswap.org/#/add/${address}`}>
+            <StyledExternalLink style={{ marginLeft: '4px' }} href={`https://app.jediswap.xyz/add/${address}`}>
               here.
             </StyledExternalLink>
           </LightGreyCard>
@@ -199,18 +199,12 @@ export default function TokenPage({
                     <StyledExternalLink
                       href={cmcLink}
                       style={{ marginLeft: '12px' }}
-                      onClickCapture={() => {
-                        ReactGA.event({
-                          category: 'CMC',
-                          action: 'CMC token page click',
-                        })
-                      }}
                     >
                       <StyledCMCLogo src={CMCLogo} />
                     </StyledExternalLink>
                   )}
                   <StyledExternalLink href={getEtherscanLink(1, address, 'address', activeNetwork)}>
-                    <ExternalLink stroke={theme.text2} size={'17px'} style={{ marginLeft: '12px' }} />
+                    <ExternalLink stroke={theme.text1} size={'17px'} style={{ marginLeft: '12px' }} />
                   </StyledExternalLink>
                 </RowFixed>
               </RowBetween>
@@ -235,7 +229,7 @@ export default function TokenPage({
                 </AutoColumn>
                 {activeNetwork !== EthereumNetworkInfo ? null : (
                   <RowFixed>
-                    <StyledExternalLink href={`https://app.uniswap.org/#/add/${address}`}>
+                    <StyledExternalLink href={`https://app.jediswap.xyz/add/${address}`}>
                       <ButtonGray width="170px" mr="12px" height={'100%'} style={{ height: '44px' }}>
                         <RowBetween>
                           <Download size={24} />
@@ -243,7 +237,7 @@ export default function TokenPage({
                         </RowBetween>
                       </ButtonGray>
                     </StyledExternalLink>
-                    <StyledExternalLink href={`https://app.uniswap.org/#/swap?inputCurrency=${address}`}>
+                    <StyledExternalLink href={`https://app.jediswap.xyz/swap?inputCurrency=${address}`}>
                       <ButtonPrimary width="100px" bgColor={backgroundColor} style={{ height: '44px' }}>
                         Trade
                       </ButtonPrimary>
@@ -387,17 +381,13 @@ export default function TokenPage({
               </DarkGreyCard>
             </ContentLayout>
             <TYPE.main>Pools</TYPE.main>
-            <DarkGreyCard>
-              <PoolTable poolDatas={poolDatas} />
-            </DarkGreyCard>
+            <PoolTable poolDatas={poolDatas} />
             <TYPE.main>Transactions</TYPE.main>
-            <DarkGreyCard>
               {transactions ? (
                 <TransactionTable transactions={transactions} color={backgroundColor} />
               ) : (
                 <LocalLoader fill={false} />
               )}
-            </DarkGreyCard>
           </AutoColumn>
         )
       ) : (

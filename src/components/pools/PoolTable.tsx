@@ -19,6 +19,14 @@ import { useActiveNetworkVersion } from 'state/application/hooks'
 
 const Wrapper = styled(DarkGreyCard)`
   width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 8px;
+`
+
+const TableHeader = styled.div`
+  background: rgba(255, 255, 255, 0.2);
+  padding: 16px 30px;
 `
 
 const ResponsiveGrid = styled.div`
@@ -52,6 +60,8 @@ const ResponsiveGrid = styled.div`
 
 const LinkWrapper = styled(Link)`
   text-decoration: none;
+  padding: 15px 30px;
+
   :hover {
     cursor: pointer;
     opacity: 0.7;
@@ -71,8 +81,8 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
   return (
     <LinkWrapper to={networkPrefix(activeNetwork) + 'pools/' + poolData.address}>
       <ResponsiveGrid>
-        <Label fontWeight={400}>{index + 1}</Label>
-        <Label fontWeight={400}>
+        <Label>{index + 1}</Label>
+        <Label>
           <RowFixed>
             <DoubleCurrencyLogo address0={poolData.token0.address} address1={poolData.token1.address} />
             <TYPE.label ml="8px">
@@ -83,13 +93,13 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
             </GreyBadge>
           </RowFixed>
         </Label>
-        <Label end={1} fontWeight={400}>
+        <Label end={1}>
           {formatDollarAmount(poolData.tvlUSD)}
         </Label>
-        <Label end={1} fontWeight={400}>
+        <Label end={1}>
           {formatDollarAmount(poolData.volumeUSD)}
         </Label>
-        <Label end={1} fontWeight={400}>
+        <Label end={1}>
           {formatDollarAmount(poolData.volumeUSDWeek)}
         </Label>
       </ResponsiveGrid>
@@ -157,52 +167,56 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
   return (
     <Wrapper>
       {sortedPools.length > 0 ? (
-        <AutoColumn gap="16px">
-          <ResponsiveGrid>
-            <Label color={theme.text2}>#</Label>
-            <ClickableText color={theme.text2} onClick={() => handleSort(SORT_FIELD.feeTier)}>
-              Pool {arrow(SORT_FIELD.feeTier)}
-            </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
-              TVL {arrow(SORT_FIELD.tvlUSD)}
-            </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
-              Volume 24H {arrow(SORT_FIELD.volumeUSD)}
-            </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSDWeek)}>
-              Volume 7D {arrow(SORT_FIELD.volumeUSDWeek)}
-            </ClickableText>
-          </ResponsiveGrid>
+        <>
+          <TableHeader>
+            <ResponsiveGrid>
+              <Label>#</Label>
+              <ClickableText onClick={() => handleSort(SORT_FIELD.feeTier)}>
+                Pool {arrow(SORT_FIELD.feeTier)}
+              </ClickableText>
+              <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
+                TVL {arrow(SORT_FIELD.tvlUSD)}
+              </ClickableText>
+              <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
+                Volume 24H {arrow(SORT_FIELD.volumeUSD)}
+              </ClickableText>
+              <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.volumeUSDWeek)}>
+                Volume 7D {arrow(SORT_FIELD.volumeUSDWeek)}
+              </ClickableText>
+            </ResponsiveGrid>
+          </TableHeader>
           <Break />
-          {sortedPools.map((poolData, i) => {
-            if (poolData) {
-              return (
-                <React.Fragment key={i}>
-                  <DataRow index={(page - 1) * MAX_ITEMS + i} poolData={poolData} />
-                  <Break />
-                </React.Fragment>
-              )
-            }
-            return null
-          })}
-          <PageButtons>
-            <div
-              onClick={() => {
-                setPage(page === 1 ? page : page - 1)
-              }}
-            >
-              <Arrow faded={page === 1 ? true : false}>←</Arrow>
-            </div>
-            <TYPE.body>{'Page ' + page + ' of ' + maxPage}</TYPE.body>
-            <div
-              onClick={() => {
-                setPage(page === maxPage ? page : page + 1)
-              }}
-            >
-              <Arrow faded={page === maxPage ? true : false}>→</Arrow>
-            </div>
-          </PageButtons>
-        </AutoColumn>
+          <AutoColumn>
+            {sortedPools.map((poolData, i) => {
+              if (poolData) {
+                return (
+                  <React.Fragment key={i}>
+                    <DataRow index={(page - 1) * MAX_ITEMS + i} poolData={poolData} />
+                    <Break />
+                  </React.Fragment>
+                )
+              }
+              return null
+            })}
+            <PageButtons>
+              <div
+                onClick={() => {
+                  setPage(page === 1 ? page : page - 1)
+                }}
+              >
+                <Arrow faded={page === 1 ? true : false}>←</Arrow>
+              </div>
+              <TYPE.body>{'Page ' + page + ' of ' + maxPage}</TYPE.body>
+              <div
+                onClick={() => {
+                  setPage(page === maxPage ? page : page + 1)
+                }}
+              >
+                <Arrow faded={page === maxPage ? true : false}>→</Arrow>
+              </div>
+            </PageButtons>
+          </AutoColumn>
+        </>
       ) : (
         <LoadingRows>
           <div />

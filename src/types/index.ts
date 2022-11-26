@@ -9,6 +9,12 @@ export enum VolumeWindow {
   monthly,
 }
 
+export enum TvlWindow {
+  daily,
+  weekly,
+  monthly,
+}
+
 export interface ChartDayData {
   date: number
   volumeUSD: number

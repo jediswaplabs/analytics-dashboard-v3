@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, useEffect } from 'react'
+import React, {useCallback, useState, useMemo, useEffect, useRef} from 'react'
 import styled from 'styled-components'
 import { DarkGreyCard } from 'components/Card'
 import Loader from 'components/Loader'
@@ -14,10 +14,21 @@ import { PageButtons, Arrow, Break } from 'components/shared'
 import useTheme from 'hooks/useTheme'
 import HoverInlineText from 'components/HoverInlineText'
 import { useActiveNetworkVersion } from 'state/application/hooks'
-import { OptimismNetworkInfo } from 'constants/networks'
+import {CeloNetworkInfo, EthereumNetworkInfo, OptimismNetworkInfo, PolygonNetworkInfo} from 'constants/networks'
+import { Link } from 'react-router-dom'
+import {useOnClickOutside} from "../../hooks/useOnClickOutside";
+import {ChevronDown} from "react-feather";
 
 const Wrapper = styled(DarkGreyCard)`
   width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 8px;
+`
+
+const TableHeader = styled.div`
+  background: rgba(255, 255, 255, 0.2);
+  padding: 16px 30px;
 `
 
 const ResponsiveGrid = styled.div`
@@ -64,19 +75,45 @@ const ResponsiveGrid = styled.div`
   }
 `
 
-const SortText = styled.button<{ active: boolean }>`
+const FlyOut = styled.div`
+  top: 100%;
+  color: #fff;
+  text-align: left;
+  width: auto;
+  padding: 0;
+  background-color: ${({ theme }) => theme.bg1};
+  position: absolute;
+  left: 0;
+  border-radius: 12px;
+`
+
+const MenuContainer = styled.div`
+  position: relative;
+`;
+
+const SelectedMenuItem = styled.div`
+  position: relative;
   cursor: pointer;
-  font-weight: ${({ active }) => (active ? 500 : 400)};
-  margin-right: 0.75rem !important;
+  font-weight: 700;
+  font-size: 14px;
+`;
+
+const MenuItem = styled.button`
+  cursor: pointer;
   border: none;
   background-color: transparent;
-  font-size: 1rem;
-  padding: 0px;
-  color: ${({ active, theme }) => (active ? theme.text1 : theme.text3)};
+  font-size: 14px;
+  padding: 10px;
+  color: #fff;
+  text-align: left;
   outline: none;
   @media screen and (max-width: 600px) {
     font-size: 14px;
   }
+`
+
+const ResponsiveGridWrapper = styled(ResponsiveGrid)`
+  padding: 15px 30px;
 `
 
 const SORT_FIELD = {
@@ -96,9 +133,9 @@ const DataRow = ({ transaction, color }: { transaction: Transaction; color?: str
   const theme = useTheme()
 
   return (
-    <ResponsiveGrid>
+    <ResponsiveGridWrapper>
       <ExternalLink href={getEtherscanLink(1, transaction.hash, 'transaction', activeNetwork)}>
-        <Label color={color ?? theme.blue1} fontWeight={400}>
+        <Label color={color ?? theme.blue1}>
           {transaction.type === TransactionType.MINT
             ? `Add ${transaction.token0Symbol} and ${transaction.token1Symbol}`
             : transaction.type === TransactionType.SWAP
@@ -106,16 +143,16 @@ const DataRow = ({ transaction, color }: { transaction: Transaction; color?: str
             : `Remove ${transaction.token0Symbol} and ${transaction.token1Symbol}`}
         </Label>
       </ExternalLink>
-      <Label end={1} fontWeight={400}>
+      <Label end={1}>
         {formatDollarAmount(transaction.amountUSD)}
       </Label>
-      <Label end={1} fontWeight={400}>
+      <Label end={1}>
         <HoverInlineText text={`${formatAmount(abs0)}  ${transaction.token0Symbol}`} maxCharacters={16} />
       </Label>
-      <Label end={1} fontWeight={400}>
+      <Label end={1}>
         <HoverInlineText text={`${formatAmount(abs1)}  ${transaction.token1Symbol}`} maxCharacters={16} />
       </Label>
-      <Label end={1} fontWeight={400}>
+      <Label end={1}>
         <ExternalLink
           href={getEtherscanLink(1, transaction.sender, 'address', activeNetwork)}
           style={{ color: color ?? theme.blue1 }}
@@ -123,10 +160,10 @@ const DataRow = ({ transaction, color }: { transaction: Transaction; color?: str
           {shortenAddress(transaction.sender)}
         </ExternalLink>
       </Label>
-      <Label end={1} fontWeight={400}>
+      <Label end={1}>
         {formatTime(transaction.timestamp, activeNetwork === OptimismNetworkInfo ? 8 : 0)}
       </Label>
-    </ResponsiveGrid>
+    </ResponsiveGridWrapper>
   )
 }
 
@@ -141,6 +178,14 @@ export default function TransactionTable({
 }) {
   // theming
   const theme = useTheme()
+
+  const [showMenu, setShowMenu] = useState(false)
+
+  useEffect(() => {
+    console.log(showMenu);
+  }, [showMenu])
+  const node = useRef<HTMLDivElement>(null)
+  useOnClickOutside(node, () => setShowMenu(false))
 
   // for sorting
   const [sortField, setSortField] = useState(SORT_FIELD.timestamp)
@@ -202,60 +247,62 @@ export default function TransactionTable({
 
   return (
     <Wrapper>
-      <AutoColumn gap="16px">
+      <TableHeader>
         <ResponsiveGrid>
-          <RowFixed>
-            <SortText
-              onClick={() => {
-                setTxFilter(undefined)
-              }}
-              active={txFilter === undefined}
-            >
-              All
-            </SortText>
-            <SortText
-              onClick={() => {
-                setTxFilter(TransactionType.SWAP)
-              }}
-              active={txFilter === TransactionType.SWAP}
-            >
-              Swaps
-            </SortText>
-            <SortText
-              onClick={() => {
-                setTxFilter(TransactionType.MINT)
-              }}
-              active={txFilter === TransactionType.MINT}
-            >
-              Adds
-            </SortText>
-            <SortText
-              onClick={() => {
-                setTxFilter(TransactionType.BURN)
-              }}
-              active={txFilter === TransactionType.BURN}
-            >
-              Removes
-            </SortText>
-          </RowFixed>
-          <ClickableText color={theme.text2} onClick={() => handleSort(SORT_FIELD.amountUSD)} end={1}>
+          <MenuContainer ref={node}>
+            <SelectedMenuItem className={"wrapper"} onClick={() => setShowMenu(!showMenu)}>
+              <RowFixed style={{display: 'inline-flex'}}>
+                {txFilter === undefined && 'All'}
+                {txFilter === TransactionType.SWAP && 'Swaps'}
+                {txFilter === TransactionType.MINT && 'Adds'}
+                {txFilter === TransactionType.BURN && 'Removes'}
+                <ChevronDown size="20px" />
+              </RowFixed>
+            </SelectedMenuItem>
+            {showMenu && (
+              <FlyOut>
+                <AutoColumn gap="10px" style={{padding: '10px'}}>
+                  {txFilter != undefined && (
+                    <MenuItem onClick={() => {setTxFilter(undefined)}}>All</MenuItem>
+                  )}
+                  {txFilter != TransactionType.SWAP && (
+                    <MenuItem onClick={() => {setTxFilter(TransactionType.SWAP)}}>Swaps</MenuItem>
+                  )}
+                  {txFilter != TransactionType.MINT && (
+                    <MenuItem onClick={() => {setTxFilter(TransactionType.MINT)}}>Adds</MenuItem>
+                  )}
+                  {txFilter != TransactionType.BURN && (
+                    <MenuItem onClick={() => {setTxFilter(TransactionType.BURN)}}>Removes</MenuItem>
+                  )}
+                </AutoColumn>
+              </FlyOut>
+            )}
+
+          </MenuContainer>
+
+
+
+
+          {/*</RowFixed>*/}
+          <ClickableText onClick={() => handleSort(SORT_FIELD.amountUSD)} end={1}>
             Total Value {arrow(SORT_FIELD.amountUSD)}
           </ClickableText>
-          <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.amountToken0)}>
+          <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.amountToken0)}>
             Token Amount {arrow(SORT_FIELD.amountToken0)}
           </ClickableText>
-          <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.amountToken1)}>
+          <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.amountToken1)}>
             Token Amount {arrow(SORT_FIELD.amountToken1)}
           </ClickableText>
-          <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.sender)}>
+          <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.sender)}>
             Account {arrow(SORT_FIELD.sender)}
           </ClickableText>
-          <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.timestamp)}>
+          <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.timestamp)}>
             Time {arrow(SORT_FIELD.timestamp)}
           </ClickableText>
         </ResponsiveGrid>
-        <Break />
-
+      </TableHeader>
+      <Break />
+      <AutoColumn>
         {sortedTransactions.map((t, i) => {
           if (t) {
             return (

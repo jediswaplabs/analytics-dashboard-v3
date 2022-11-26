@@ -1,24 +1,26 @@
+/* eslint-disable */
 import React, { Dispatch, SetStateAction, ReactNode } from 'react'
-import { ResponsiveContainer, XAxis, Tooltip, AreaChart, Area } from 'recharts'
+import {ResponsiveContainer, XAxis, Tooltip, AreaChart, Area, YAxis} from 'recharts'
 import styled from 'styled-components'
-import Card from 'components/Card'
+import Card, {DarkGreyCard} from 'components/Card'
 import { RowBetween } from 'components/Row'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import useTheme from 'hooks/useTheme'
 import { darken } from 'polished'
 import { LoadingRows } from 'components/Loader'
+import {TvlWindow, VolumeWindow} from "../../types";
+import {formatDollarAmount} from "../../utils/numbers";
 dayjs.extend(utc)
 
 const DEFAULT_HEIGHT = 300
 
-const Wrapper = styled(Card)`
+const Wrapper = styled(DarkGreyCard)`
   width: 100%;
   height: ${DEFAULT_HEIGHT}px;
-  padding: 1rem;
-  padding-right: 2rem;
+  padding: 32px;
   display: flex;
-  background-color: ${({ theme }) => theme.bg0};
+  //background-color: ${({ theme }) => theme.bg0};
   flex-direction: column;
   > * {
     font-size: 1rem;
@@ -34,6 +36,7 @@ export type LineChartProps = {
   setLabel?: Dispatch<SetStateAction<string | undefined>> // used for label of valye
   value?: number
   label?: string
+  activeWindow?: TvlWindow
   topLeft?: ReactNode | undefined
   topRight?: ReactNode | undefined
   bottomLeft?: ReactNode | undefined
@@ -48,6 +51,7 @@ const Chart = ({
   setValue,
   setLabel,
   topLeft,
+  activeWindow,
   topRight,
   bottomLeft,
   bottomRight,
@@ -56,10 +60,11 @@ const Chart = ({
 }: LineChartProps) => {
   const theme = useTheme()
   const parsedValue = value
-
+  const now = dayjs()
+  console.log(data);
   return (
     <Wrapper minHeight={minHeight} {...rest}>
-      <RowBetween>
+      <RowBetween style={{ alignItems: 'flex-start', marginBottom: 10 }}>
         {topLeft ?? null}
         {topRight ?? null}
       </RowBetween>
@@ -88,15 +93,28 @@ const Chart = ({
           >
             <defs>
               <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={darken(0.36, color)} stopOpacity={0.5} />
+                <stop offset="5%" stopColor={color} stopOpacity={1} />
                 <stop offset="100%" stopColor={color} stopOpacity={0} />
               </linearGradient>
             </defs>
+            <YAxis
+              dataKey="value"
+              axisLine={false}
+              stroke={theme.text1}
+              tickLine={false}
+              fontSize={12}
+              dx={-10}
+              tickFormatter={(value) => formatDollarAmount(value, 2)}
+              // minTickGap={12}
+            />
             <XAxis
               dataKey="time"
               axisLine={false}
               tickLine={false}
-              tickFormatter={(time) => dayjs(time).format('DD')}
+              stroke={theme.text1}
+              dy={10}
+              fontSize={12}
+              tickFormatter={(time) => dayjs(time).format(activeWindow === TvlWindow.monthly ? 'MMM' : 'DD')}
               minTickGap={10}
             />
             <Tooltip
@@ -106,8 +124,31 @@ const Chart = ({
                 if (setValue && parsedValue !== props.payload.value) {
                   setValue(props.payload.value)
                 }
-                const formattedTime = dayjs(props.payload.time).format('MMM D, YYYY')
-                if (setLabel && label !== formattedTime) setLabel(formattedTime)
+
+                const formattedTime = dayjs(props.payload.time).format('MMM D')
+                const formattedTimeDaily = dayjs(props.payload.time).format('MMM D YYYY')
+                const formattedTimePlusWeek = dayjs(props.payload.time).add(1, 'week')
+                const formattedTimePlusMonth = dayjs(props.payload.time).add(1, 'month')
+
+                if (setLabel && label !== formattedTime) {
+                  if (activeWindow === TvlWindow.weekly) {
+                    const isCurrent = formattedTimePlusWeek.isAfter(now)
+                    setLabel(
+                      formattedTime + '-' + (isCurrent ? 'current' : formattedTimePlusWeek.format('MMM D, YYYY'))
+                    )
+                  } else if (activeWindow === TvlWindow.monthly) {
+                    const isCurrent = formattedTimePlusMonth.isAfter(now)
+                    setLabel(
+                      formattedTime + '-' + (isCurrent ? 'current' : formattedTimePlusMonth.format('MMM D, YYYY'))
+                    )
+                  } else {
+                    setLabel(formattedTimeDaily)
+                  }
+                }
+
+                //
+                // const formattedTime = dayjs(props.payload.time).format('MMM D, YYYY')
+                // if (setLabel && label !== formattedTime) setLabel(formattedTime)
               }}
             />
             <Area dataKey="value" type="monotone" stroke={color} fill="url(#gradient)" strokeWidth={2} />

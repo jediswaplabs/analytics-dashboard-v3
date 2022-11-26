@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from 'react'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 import { darken, lighten } from 'polished'
 
 import { RowBetween } from '../Row'
@@ -96,7 +96,7 @@ export const ButtonLight = styled(Base)`
 
 export const ButtonGray = styled(Base)`
   background-color: ${({ theme }) => theme.bg3};
-  color: ${({ theme }) => theme.text2};
+  color: ${({ theme }) => theme.text1};
   font-size: 16px;
   font-weight: 500;
   outline: none;
@@ -407,20 +407,28 @@ export const SavedIcon = ({
   const theme = useTheme()
   return (
     <HoverIcon {...rest}>
-      <Star stroke={theme.text2} fill={fill ? theme.text2 : 'transparent'} size={size} />
+      <Star stroke={theme.text1} fill={fill ? theme.text1 : 'transparent'} size={size} />
     </HoverIcon>
   )
 }
 
 export const SmallOptionButton = styled(Base)<{ active?: boolean }>`
-  padding: 4px;
+  padding: 4px 17px;
   width: fit-content;
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 4px;
+  border: none;
   min-width: 36px;
-  background-color: ${({ active, theme }) => (active ? theme.bg2 : theme.bg1)};
-  color: ${({ active, theme }) => (active ? theme.text1 : theme.text2)};
+  background-color: ${({ active, theme }) => (active ? theme.white : theme.bg1)};
+  font-weight: 700;
+  color: ${({ active, theme }) => (active ? theme.text2 : theme.text1)};
 
+  
+  ${({active, theme}) => !active && css`
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0px 3.07909px 13.8559px rgba(154, 146, 210, 0.3), inset 0px 0.769772px 30.7909px rgba(227, 222, 255, 0.2);
+  `}
+  
   :hover {
     opacity: 0.6;
   }

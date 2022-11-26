@@ -53,16 +53,17 @@ export default function Toggle({ id, isActive, toggle }: ToggleProps) {
   )
 }
 
-export const ToggleWrapper = styled.button<{ width?: string }>`
+export const ToggleWrapper = styled.div<{ width?: string }>`
   display: flex;
   align-items: center;
-  width: ${({ width }) => width ?? '100%'}
+  width: ${({ width }) => width ?? '100%'};
   padding: 1px;
-  background: ${({ theme }) => theme.bg2};
+  // background: ${({ theme }) => theme.bg2};
   border-radius: 12px;
-  border: ${({ theme }) => '2px solid ' + theme.bg2};
+  // border: ${({ theme }) => '2px solid ' + theme.bg2};
   cursor: pointer;
   outline: none;
+  background: transparent;
   color: ${({ theme }) => theme.text2};
 
 `

@@ -5,18 +5,24 @@ import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsRepo
 import Header from '../components/Header'
 import URLWarning from '../components/Header/URLWarning'
 import Popups from '../components/Popups'
-import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
 import Home from './Home'
 import PoolsOverview from './Pool/PoolsOverview'
 import TokensOverview from './Token/TokensOverview'
-import TopBar from 'components/Header/TopBar'
+import SearchSmall from 'components/Search'
 import { RedirectInvalidToken } from './Token/redirects'
 import { LocalLoader } from 'components/Loader'
 import PoolPage from './Pool/PoolPage'
 import { ExternalLink, TYPE } from 'theme'
 import { useActiveNetworkVersion, useSubgraphStatus } from 'state/application/hooks'
 import { DarkGreyCard } from 'components/Card'
-import { SUPPORTED_NETWORK_VERSIONS, EthereumNetworkInfo, OptimismNetworkInfo } from 'constants/networks'
+import {
+  SUPPORTED_NETWORK_VERSIONS,
+  EthereumNetworkInfo,
+  OptimismNetworkInfo,
+  StarknetNetworkInfo
+} from 'constants/networks'
+import {ThemedBackgroundGlobal} from "./styled";
+import {AutoColumn} from "../components/Column";
 
 const AppWrapper = styled.div`
   display: flex;
@@ -59,26 +65,14 @@ const Marginer = styled.div`
   margin-top: 5rem;
 `
 
-const Hide1080 = styled.div`
-  @media (max-width: 1080px) {
-    display: none;
-  }
-`
-
-const WarningWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`
-
-const WarningBanner = styled.div`
-  background-color: ${({ theme }) => theme.bg3};
-  padding: 1rem;
-  color: white;
-  font-size: 14px;
-  width: 100%;
-  text-align: center;
-  font-weight: 500;
+export const PageWrapper = styled.div`
+  width: 90%;
+  padding: 85px 30px 50px;
+  background: rgba(196, 196, 196, 0.01);
+  border: 2px solid #FFFFFF;
+  box-shadow: inset 0px 30.0211px 43.1072px -27.7118px rgba(255, 255, 255, 0.5), inset 0px 5.38841px 8.46749px -3.07909px #FFFFFF, inset 0px -63.1213px 52.3445px -49.2654px rgba(96, 68, 145, 0.3), inset 0px 75.4377px 76.9772px -36.9491px rgba(202, 172, 255, 0.3), inset 0px 3.07909px 13.8559px rgba(154, 146, 210, 0.3), inset 0px 0.769772px 30.7909px rgba(227, 222, 255, 0.2);
+  //backdrop-filter: blur(38.4886px);
+  border-radius: 16px;
 `
 
 const BLOCK_DIFFERENCE_THRESHOLD = 30
@@ -96,7 +90,7 @@ export default function App() {
   const [activeNetwork, setActiveNetwork] = useActiveNetworkVersion()
   useEffect(() => {
     if (location.pathname === '/') {
-      setActiveNetwork(EthereumNetworkInfo)
+      setActiveNetwork(StarknetNetworkInfo)
     } else {
       SUPPORTED_NETWORK_VERSIONS.map((n) => {
         if (location.pathname.includes(n.route.toLocaleLowerCase())) {
@@ -116,10 +110,8 @@ export default function App() {
 
   return (
     <Suspense fallback={null}>
-      <Route component={GoogleAnalyticsReporter} />
-      <Route component={DarkModeQueryParamReader} />
       {loading ? (
-        <LocalLoader fill={true} />
+        <LocalLoader />
       ) : (
         <AppWrapper>
           <URLWarning />
@@ -140,14 +132,22 @@ export default function App() {
           ) : (
             <BodyWrapper warningActive={showNotSyncedWarning}>
               <Popups />
-              <Switch>
-                <Route exact strict path="/:networkID?/pools/:address" component={PoolPage} />
-                <Route exact strict path="/:networkID?/pools" component={PoolsOverview} />
-                <Route exact strict path="/:networkID?/tokens/:address" component={RedirectInvalidToken} />
-                <Route exact strict path="/:networkID?/tokens" component={TokensOverview} />
-                <Route exact path="/:networkID?" component={Home} />
-              </Switch>
-              <Marginer />
+
+              <PageWrapper>
+                <AutoColumn gap="32px">
+                  <ThemedBackgroundGlobal backgroundColor={activeNetwork.bgColor} />
+                  <SearchSmall />
+                  <Switch>
+                    <Route exact strict path="/:networkID?/pools/:address" component={PoolPage} />
+                    <Route exact strict path="/:networkID?/pools" component={PoolsOverview} />
+                    <Route exact strict path="/:networkID?/tokens/:address" component={RedirectInvalidToken} />
+                    <Route exact strict path="/:networkID?/tokens" component={TokensOverview} />
+                    <Route exact path="/:networkID?" component={Home} />
+                  </Switch>
+                  <Marginer />
+                </AutoColumn>
+              </PageWrapper>
+
             </BodyWrapper>
           )}
         </AppWrapper>

@@ -27,17 +27,12 @@ const Container = styled.div`
 `
 
 const Wrapper = styled(Row)`
-  background-color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.jediNavyBlue};
   padding: 10px 16px;
-  width: 500px;
-  height: 38px;
-  border-radius: 20px;
-  positon: relative;
+  width: 100%;
+  height: 50px;
+  position: relative;
   z-index: 9999;
-
-  @media (max-width: 1080px) {
-    width: 100%;
-  } ;
 `
 
 const StyledInput = styled.input`
@@ -53,7 +48,7 @@ const StyledInput = styled.input`
   color: ${({ theme }) => theme.text1};
 
   ::placeholder {
-    color: ${({ theme }) => theme.text3};
+    color: ${({ theme }) => theme.jediGrey};
     font-size: 16px;
   }
 
@@ -68,7 +63,7 @@ const Menu = styled.div<{ hide: boolean }>`
   display: flex;
   flex-direction: column;
   z-index: 9999;
-  width: 800px;
+  width: 100%;
   top: 50px;
   max-height: 600px;
   overflow: auto;
@@ -76,12 +71,15 @@ const Menu = styled.div<{ hide: boolean }>`
   padding: 1.5rem;
   padding-bottom: 1.5rem;
   position: absolute;
-  background: ${({ theme }) => theme.bg0};
-  border-radius: 8px;
+  //background: ${({ theme }) => theme.bg0};
+  background: black;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
     0px 24px 32px rgba(0, 0, 0, 0.04);
   display: ${({ hide }) => hide && 'none'};
-  border: 1px solid ${({ theme }) => theme.pink1};
+  border: 1px solid ${({ theme }) => theme.white};
+  border-top: none;
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
     position: absolute;
@@ -95,8 +93,8 @@ const Menu = styled.div<{ hide: boolean }>`
 const Blackout = styled.div`
   position: absolute;
   min-height: 100vh;
-  width: 100vw;
-  z-index: -40;
+  width: 100%;
+  z-index: -1;
   background-color: black;
   opacity: 0.7;
   left: 0;
@@ -137,18 +135,18 @@ const HoverRowLink = styled.div`
 
 const OptionButton = styled.div<{ enabled: boolean }>`
   width: fit-content;
-  padding: 4px 8px;
+  padding: 10px 28px;
   border-radius: 8px;
   display: flex;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   margin-right: 10px;
   justify-content: center;
   align-items: center;
-  background-color: ${({ theme, enabled }) => (enabled ? theme.pink1 : 'transparent')};
-  color: ${({ theme, enabled }) => (enabled ? theme.white : theme.pink1)};
+  background-color: ${({ theme, enabled }) => (enabled ? theme.jediNavyBlue : 'transparent')};
+  color: ${({ theme, enabled }) => (enabled ? theme.white : theme.white)};
   :hover {
-    opacity: 0.6;
+    //opacity: 0.9;
     cursor: pointer;
   }
 `
@@ -226,6 +224,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
   )
 
   return (
+    // @ts-ignore
     <Hotkeys keyName="command+/" onKeyDown={handleDown}>
       {showMenu ? <Blackout /> : null}
       <Container>
@@ -244,9 +243,9 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
             }}
             onBlur={() => setFocused(false)}
           />
-          {!focused && <TYPE.gray pl="2px">⌘/</TYPE.gray>}
+          {!focused && <TYPE.white pl="2px">⌘/</TYPE.white>}
         </Wrapper>
-        <Menu hide={!showMenu} ref={menuRef}>
+        <Menu  hide={!showMenu} ref={menuRef}>
           <AutoColumn gap="lg">
             <AutoColumn gap="sm">
               <RowFixed>

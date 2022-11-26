@@ -123,15 +123,12 @@ const StyledLink = styled.a`
   cursor: pointer;
   color: ${({ theme }) => theme.primary1};
   font-weight: 500;
-  display: inline;
-  flex-direction: center;
   align-items: center;
   display: flex;
 
   :hover {
-    text-decoration: underline;
     text-decoration: none;
-    opacity: 0.7;
+    //opacity: 0.7;
   }
 
   :focus {
@@ -154,7 +151,7 @@ const LinkIconWrapper = styled.a`
 
   :hover {
     text-decoration: none;
-    opacity: 0.7;
+    //opacity: 0.7;
   }
 
   :focus {
@@ -186,7 +183,7 @@ export const TrashIcon = styled(Trash)`
   display: flex;
 
   :hover {
-    opacity: 0.7;
+    //opacity: 0.7;
   }
 `
 

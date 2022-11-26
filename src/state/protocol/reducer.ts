@@ -40,6 +40,12 @@ export const initialState: ProtocolState = {
     transactions: undefined,
     lastUpdated: undefined,
   },
+  [SupportedNetwork.STARKNET]: {
+    data: undefined,
+    chartData: undefined,
+    transactions: undefined,
+    lastUpdated: undefined,
+  },
   [SupportedNetwork.ARBITRUM]: {
     data: undefined,
     chartData: undefined,
