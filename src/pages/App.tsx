@@ -45,6 +45,7 @@ const BodyWrapper = styled.div<{ warningActive?: boolean }>`
   flex-direction: column;
   width: 100%;
   padding-top: 40px;
+  padding-bottom: 40px;
   align-items: center;
   flex: 1;
   overflow-y: auto;
@@ -111,7 +112,9 @@ export default function App() {
   return (
     <Suspense fallback={null}>
       {loading ? (
-        <LocalLoader />
+        <div style={{height: '100%', position: 'absolute', width: '100%'}}>
+          <LocalLoader />
+        </div>
       ) : (
         <AppWrapper>
           <URLWarning />

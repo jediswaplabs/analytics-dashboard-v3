@@ -52,7 +52,6 @@ const pulse = keyframes`
 `
 
 const Wrapper = styled.div`
-  position: absolute;
   pointer-events: none;
   display: flex;
   align-items: center;
