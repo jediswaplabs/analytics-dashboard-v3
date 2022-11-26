@@ -340,7 +340,7 @@ export default function PoolPage({
           </ContentLayout>
           <TYPE.main fontSize="24px">Transactions</TYPE.main>
 
-          {transactions ? <TransactionTable transactions={transactions} /> : <LocalLoader fill={false} />}
+          {transactions ? <TransactionTable transactions={transactions} /> : <LocalLoader  />}
 
         </AutoColumn>
       ) : (

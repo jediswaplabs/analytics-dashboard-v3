@@ -26,7 +26,7 @@ export default function PoolPage() {
   const watchlistPools = usePoolDatas(savedPools)
 
   return (
-    <PageWrapper>
+    <>
       <AutoColumn gap="lg">
         <TYPE.main>Your Watchlist</TYPE.main>
         {watchlistPools.length > 0 ? (
@@ -47,6 +47,6 @@ export default function PoolPage() {
         <TYPE.main>All Pools</TYPE.main>
         <PoolTable poolDatas={poolDatas} />
       </AutoColumn>
-    </PageWrapper>
+    </>
   )
 }
