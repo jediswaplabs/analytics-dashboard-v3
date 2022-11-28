@@ -134,24 +134,38 @@ export default function Home() {
         <HideSmall>
             <RowBetween>
               <RowFixed>
-                <RowFixed mr="20px">
-                  <TYPE.main mr="4px" fontWeight={700}>Volume 24H: </TYPE.main>
-                  <TYPE.label mr="4px">{formatDollarAmount(protocolData?.volumeUSD)}</TYPE.label>
+
+                <RowFixed mr="40px">
+                  <TYPE.main mr="4px" fontWeight={700}>ETH Price: </TYPE.main>
+                  <TYPE.label mr="4px">{formatDollarAmount(protocolData?.ethPriceUSD)}</TYPE.label>
                   <Percent value={protocolData?.volumeUSDChange} wrap={true} />
                 </RowFixed>
-                <RowFixed mr="20px" fontWeight={700}>
-                  <TYPE.main mr="4px">Fees 24H: </TYPE.main>
+
+                <RowFixed mr="40px">
+                  <TYPE.main mr="4px" fontWeight={700}>No. of Pools: </TYPE.main>
+                  <TYPE.label mr="4px">28</TYPE.label>
+                </RowFixed>
+
+                <RowFixed mr="40px">
+                  <TYPE.main mr="4px" fontWeight={700}>Transactions (24H): </TYPE.main>
+                  <TYPE.label mr="4px">1200</TYPE.label>
+                </RowFixed>
+
+                <RowFixed mr="40px" fontWeight={700}>
+                  <TYPE.main mr="4px">Fees (24H): </TYPE.main>
                   <TYPE.label mr="4px">{formatDollarAmount(protocolData?.feesUSD)}</TYPE.label>
                   <Percent value={protocolData?.feeChange} wrap={true} />
                 </RowFixed>
-                <HideMedium>
+
+                {/*<HideMedium>
                   <RowFixed mr="20px">
                     <TYPE.main mr="4px" fontWeight={700}>TVL: </TYPE.main>
                     <TYPE.label mr="4px">{formatDollarAmount(protocolData?.tvlUSD)}</TYPE.label>
                     <TYPE.main></TYPE.main>
                     <Percent value={protocolData?.tvlUSDChange} wrap={true} />
                   </RowFixed>
-                </HideMedium>
+                </HideMedium>*/}
+
               </RowFixed>
             </RowBetween>
         </HideSmall>

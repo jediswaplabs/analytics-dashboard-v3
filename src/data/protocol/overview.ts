@@ -18,6 +18,10 @@ export const GLOBAL_DATA = (block?: string) => {
         totalFeesUSD
         totalValueLockedUSD
       }
+      bundles(first: 5){
+        id
+        ethPriceUSD
+      }
     }`
   return gql(queryString)
 }
@@ -28,6 +32,7 @@ interface GlobalResponse {
     totalVolumeUSD: string
     totalFeesUSD: string
     totalValueLockedUSD: string
+    totalEthPriceUSD: string 
   }[]
 }
 
@@ -117,6 +122,13 @@ export function useFetchProtocolData(
     const feeChange =
       feesUSD && feesOneWindowAgo ? getPercentChange(feesUSD.toString(), feesOneWindowAgo.toString()) : 0
 
+    // const ethPriceUSD =
+    const ethPriceUSD =
+      parsed && parsed24
+        ? parseFloat(parsed.totalEthPriceUSD) - parseFloat(parsed24.totalEthPriceUSD)
+        : parseFloat(parsed.totalEthPriceUSD)
+
+
     return {
       volumeUSD,
       volumeUSDChange: typeof volumeUSDChange === 'number' ? volumeUSDChange : 0,
@@ -126,6 +138,7 @@ export function useFetchProtocolData(
       feeChange,
       txCount,
       txCountChange,
+      ethPriceUSD,
     }
   }, [anyError, anyLoading, blocks, parsed, parsed24, parsed48, tvlOffset])
   return {
